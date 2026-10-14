@@ -109,7 +109,8 @@ public class PaymentWebhookServlet extends HttpServlet {
                 if (!"created".equalsIgnoreCase(paymentStatus))
                     throw new SQLException("Payment row is not in a capturable state.");
                 try (PreparedStatement update = connection.prepareStatement(
-                        "UPDATE payments SET razorpay_payment_id=?,payment_status='captured',failure_reason=NULL,updated_at=NOW() " +
+                        "UPDATE payments SET razorpay_payment_id=?,payment_status='captured',captured_at=COALESCE(captured_at,NOW())," +
+                        "failure_reason=NULL,updated_at=NOW() " +
                         "WHERE id=? AND payment_status='created'")) {
                     update.setString(1, paymentId);
                     update.setInt(2, paymentRowId);

@@ -1,0 +1,18 @@
+# IDE and local Tomcat configuration
+.idea/
+.smarttomcat/
+.local-tomcat/
+*.iml
+
+# Build output
+target/
+out/
+build/
+*.class
+*.log
+.env
+.env.*
+!.env.example
+
+# IntelliJ/Smart Tomcat exploded deployment copies
+WebContent/production/

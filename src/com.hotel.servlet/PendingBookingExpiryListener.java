@@ -22,16 +22,13 @@ public class PendingBookingExpiryListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        if (System.getenv("HOTEL_DB_URL") == null || System.getenv("HOTEL_DB_URL").trim().isEmpty()) {
-            LOG.warning("Pending booking expiry is disabled because HOTEL_DB_URL is not configured.");
-            return;
-        }
         scheduler = Executors.newSingleThreadScheduledExecutor(task -> {
             Thread thread = new Thread(task, "pending-booking-expiry");
             thread.setDaemon(true);
             return thread;
         });
         scheduler.scheduleWithFixedDelay(this::expire, 1, 5, TimeUnit.MINUTES);
+        LOG.info("Pending booking expiry scheduler started; database connections use the configured DBConnection provider.");
     }
 
     private void expire() {
